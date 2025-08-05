@@ -1,7 +1,11 @@
+mod http;
+
 use tokio::net::TcpStream;
 use tokio::net::TcpListener;
 use tokio::spawn;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+use http::HttpRequest;
 
 #[tokio::main]
 async fn main() {
@@ -35,5 +39,8 @@ async fn handle_connection(mut socket: TcpStream){
 }
 
 async fn handle_request(buf: &[u8]){
-    let _req = std::str::from_utf8(buf).unwrap_or("");
+    let req = HttpRequest::from(buf);
+    println!("{}", req.request);
+    println!("{}", req.headers);
+    println!("{}", req.body);
 }
